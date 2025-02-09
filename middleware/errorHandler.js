@@ -1,6 +1,10 @@
 import { constants } from '../util/constants.js';
+
 const errorHandler = (err, req, res, next) => {
-    const statusCode = res.statusCode ? res.statusCode : 500;
+    const statusCode = err.statusCode || 500;
+
+    res.status(statusCode);
+
     switch (statusCode) {
         case constants.VALIDATION_ERROR:
             res.json({
@@ -18,7 +22,7 @@ const errorHandler = (err, req, res, next) => {
             break;
         case constants.FORBIDDEN:
             res.json({
-                title: 'Not found',
+                title: 'Forbidden',
                 message: err.message,
                 stackTrace: err.stack,
             });
@@ -38,7 +42,11 @@ const errorHandler = (err, req, res, next) => {
             });
             break;
         default:
-            console.log('No error');
+            res.json({
+                title: 'Unknown error',
+                message: err.message || 'Something went wrong',
+                stackTrace: err.stack,
+            });
             break;
     }
 };

@@ -1,8 +1,12 @@
 import 'dotenv/config';
 import express from 'express';
+
+import { connectDB } from './config/dbConnection.js';
 import errorHandler from './middleware/errorHandler.js';
 import contactRouter from './routes/contactRoutes.js';
+import AppError from './util/AppError.js';
 
+await connectDB();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -13,7 +17,7 @@ app.use('/api/contacts', contactRouter);
 app.use('/', (req, res, next) => {
     console.log('req came');
     res.status(404);
-    throw new Error('Page not found.');
+    throw new AppError('Page not found.', 404);
 });
 
 app.listen(PORT, () => {

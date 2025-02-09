@@ -9,8 +9,8 @@ import {
 
 const router = express.Router();
 
-router.route('/').get(getAllContacts).post(postContact);
-
 router.route('/:id').get(getContact).put(putContact).delete(deleteContact);
+
+router.route('/').get(getAllContacts).post(postContact);
 
 export default router;
