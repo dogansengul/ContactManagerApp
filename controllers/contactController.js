@@ -18,12 +18,12 @@ export const getContact = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
     // Önce ID'nin geçerli olup olmadığını kontrol et
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return next(new AppError('Invalid contact ID format', 400));
+        throw new AppError('Invalid contact ID format', 400);
     }
 
     const contact = await Contact.findById(id);
     if (!contact) {
-        return next(new AppError('Contact is not found', 404));
+        throw new AppError('Contact is not found', 404);
     }
     res.status(200).json(contact);
 });
@@ -35,9 +35,7 @@ export const postContact = asyncHandler(async (req, res, next) => {
     const { name, email, phone } = req.body;
 
     if (!name || !email || !phone) {
-        return next(
-            new AppError('All request body fields are mandatory.', 400)
-        );
+        throw new AppError('All request body fields are mandatory.', 400);
     }
 
     // Contact.create() hem dokümanı oluşturur hem de veritabanına kaydeder
@@ -57,21 +55,19 @@ export const putContact = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
     // Geçerli bir ID olup olmadığını kontrol et
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return next(new AppError('Invalid contact ID format', 400));
+        throw new AppError('Invalid contact ID format', 400);
     }
 
     const contact = await Contact.findById(req.params.id);
 
     if (!contact) {
-        return next(new AppError('Contact is not found.', 404));
+        throw new AppError('Contact is not found.', 404);
     }
 
     if (contact.user.user_id.toString() !== req.user.id) {
-        return next(
-            new AppError(
-                "User don't have permission to update other users contacts.",
-                403
-            )
+        throw new AppError(
+            "User don't have permission to update other users contacts.",
+            403
         );
     }
 
@@ -90,30 +86,26 @@ export const deleteContact = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
     // Önce ID'nin geçerli olup olmadığını kontrol et
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return next(new AppError('Invalid contact ID format', 400));
+        throw new AppError('Invalid contact ID format', 400);
     }
 
     const contact = await Contact.findById(req.params.id);
 
     if (!contact) {
-        return next(new AppError('Contact is not found.', 404));
+        throw new AppError('Contact is not found.', 404);
     }
 
     if (contact.user.user_id.toString() !== req.user.id) {
-        return next(
-            new AppError(
-                "User don't have permission to update other users contacts.",
-                403
-            )
+        throw new AppError(
+            "User don't have permission to update other users contacts.",
+            403
         );
     }
     const deletedContact = await Contact.findByIdAndDelete(id);
     if (!deletedContact) {
-        return next(
-            new AppError(
-                "User don't have permission to delete other users contacts.",
-                404
-            )
+        throw new AppError(
+            "User don't have permission to delete other users contacts.",
+            404
         );
     }
 

@@ -15,7 +15,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
             'All request body fields are mandatory.',
             400
         );
-        return next(error);
+        throw error;
     }
     const userAvailableEmail = await User.findOne({ email });
     if (userAvailableEmail) {
@@ -23,7 +23,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
             'This email adress is in use. Please login.',
             400
         );
-        return next(error);
+        throw error;
     }
     const userAvailableUserName = await User.findOne({ userName });
     if (userAvailableUserName) {
@@ -31,7 +31,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
             'This userName is in use. Please login.',
             400
         );
-        return next(error);
+        throw error;
     }
 
     //Hash password
@@ -53,7 +53,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
         });
     } else {
         const error = new AppError('User data is not valid', 400);
-        return next(error);
+        throw error;
     }
 });
 
@@ -67,7 +67,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
             'All request body fields are mandatory.',
             400
         );
-        return next(error);
+        throw error;
     }
     const user = await User.findOne({ email });
     if (user && (await bcrypt.compare(password, user.password))) {
@@ -85,7 +85,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
         res.status(200).json({ accessToken });
     } else {
         const error = new AppError('Email or password is not valid.', 401);
-        return next(error);
+        throw error;
     }
 });
 
