@@ -12,7 +12,7 @@ export const validateToken = asyncHandler(async (req, res, next) => {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
             if (err) {
                 // Token hatalı veya süresi dolmuş
-                return next(new AppError('User is not authorized', 401));
+                throw new AppError('User is not authorized', 401);
             }
             // Token geçerli, user bilgisini isteğe ekliyoruz
             req.user = decoded.user;
@@ -23,8 +23,6 @@ export const validateToken = asyncHandler(async (req, res, next) => {
         });
     } else {
         // Token yok veya "Bearer" ile başlamıyor
-        return next(
-            new AppError('No token found. User is not authorized', 401)
-        );
+        throw new AppError('No token found. User is not authorized', 401);
     }
 });

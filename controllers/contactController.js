@@ -64,17 +64,26 @@ export const putContact = asyncHandler(async (req, res, next) => {
         throw new AppError('Contact is not found.', 404);
     }
 
-    if (contact.user.user_id.toString() !== req.user.id) {
+    if (contact.user_id.toString() !== req.user.id) {
         throw new AppError(
             "User don't have permission to update other users contacts.",
             403
         );
     }
 
-    const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {
-        new: true,
-        runValidators: true,
-    });
+    const updatedContact = await Contact.findByIdAndUpdate(
+        id,
+        {
+            user_id: req.user.id,
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.phone,
+        },
+        {
+            new: true,
+            runValidators: true,
+        }
+    );
 
     res.status(200).json(updatedContact);
 });
@@ -95,7 +104,7 @@ export const deleteContact = asyncHandler(async (req, res, next) => {
         throw new AppError('Contact is not found.', 404);
     }
 
-    if (contact.user.user_id.toString() !== req.user.id) {
+    if (contact.user_id.toString() !== req.user.id) {
         throw new AppError(
             "User don't have permission to update other users contacts.",
             403
