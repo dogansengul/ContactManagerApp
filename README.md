@@ -1,18 +1,12 @@
 # Contact Manager API
 
-A RESTful API for managing contacts, built with Node.js, Express, and MongoDB Atlas. This API features user authentication via JSON Web Tokens (JWT), robust error handling, and a clean, modular codebase following modern best practices.
+A RESTful API for managing contacts, built with Node.js, Express, and MongoDB Atlas. This API features user authentication via JSON Web Tokens (JWT), robust error handling, and a clean, modular codebase following modern best practices. With the help of "Dipesh Malvia" on YouTube.
 
 ## Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
-- [Installation](#installation)
-- [Environment Variables](#environment-variables)
-- [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Overview
 
@@ -39,3 +33,4 @@ The Contact Manager API provides a backend solution for storing and managing con
 - **dotenv**: To load environment variables.
 - **express-async-handler**: To simplify error handling in async functions.
 - **ES Modules (ESM)**: Modern JavaScript module system.
+
